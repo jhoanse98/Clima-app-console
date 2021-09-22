@@ -1,8 +1,6 @@
 require('dotenv').config()
 
-console.log(process.env)
-
-const { confirmar, inquirerMenu, pausa, leerInput, listadoLugares } = require("./helpers/inquirer")
+const {  inquirerMenu, pausa, leerInput, listadoLugares } = require("./helpers/inquirer")
 const Busqueda = require("./models/Busqueda")
 
 const main = async () => {
@@ -23,10 +21,17 @@ const main = async () => {
                 
                 //Seleccionar el lugar
                 const id = await listadoLugares(lugares)
+                if(id === '0') continue
                 const lugarSeleccionado = lugares.find(l => l.id === id)
-                console.log(lugarSeleccionado)
+
+                //Guardar en la BD
+                busqueda.guardarHistorial(lugarSeleccionado.nombre)
+                
 
                 //Clima
+                const {lat, lng} = lugarSeleccionado
+                const clima = await busqueda.clima(lat, lng)
+                const {weather, main } = clima.data
 
 
                 //Mostrar resultados
@@ -35,9 +40,17 @@ const main = async () => {
                 console.log('Ciudad: ', lugarSeleccionado.nombre )
                 console.log('Lat: ', lugarSeleccionado.lat)
                 console.log('Lng: ', lugarSeleccionado.lng)
-                console.log('Temperatura: ', )
-                console.log('Minima: ', )
-                console.log('Maxima: ', )
+                console.log('Temperatura: ', main.temp)
+                console.log('Minima: ', main.temp_min)
+                console.log('Maxima: ', main.temp_max )
+                console.log('Descripción; ', weather[0].description)
+                break
+
+                case 2:
+                    busqueda.historialCapitalizado.forEach((lugar, i) => {
+                        const idx = `${i+1}`.green
+                        console.log(`${idx} ${lugar}`)
+                    })
                 break
         }
 

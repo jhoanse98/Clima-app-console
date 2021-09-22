@@ -39,33 +39,10 @@ const pausa = async () => {
         {
             type: 'input',
             name: 'respuesta',
-            message: `Oprime la tecla ${'ENTER'.green} para continuar`
+            message: `\n Oprime la tecla ${'ENTER'.green} para continuar`
         }        
     ])
     
-}
-
-const mostrarListadoCheckList = async ( tareas= [] ) => {
-
-    const choices = tareas.map( (tarea, i) => {
-        const idx = `${i+1}.`.green
-        return {
-            value: tarea.id,
-            name: `${idx} ${tarea.descripcion}`,
-            checked: (tarea.completadaEn) ? true : false
-        }
-    })
-
-    const pregunta = [{
-        type:'checkbox',
-        name: 'ids',
-        message: 'Seleccione',
-        choices
-    }]
-
-
-    const { ids } = await inquirer.prompt(pregunta)
-    return ids
 }
 
 
